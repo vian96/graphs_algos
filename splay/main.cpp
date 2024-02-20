@@ -3,19 +3,29 @@
 #include <vector>
 #include <iostream>
 
-int main() {
-    // Node<int> root(std::vector<int>({1,5,2,24,6,72,124,3}));
+void test() {
     Node<int> *root = new Node<int>(std::vector<int>({60,50,40,30,20,10, 51, 52, 57, 52, 41,42,43, 70, 80, 90}));
     root->dump();
     // root->raw_dump();
-    root = root->rotate_right();
-    // root->left->rotate_right();
-    std::cout << "rotated\n";
-    // root->raw_dump();
-    root->dump();
-    root = root->rotate_left();
-    std::cout << "left rot\n";
-    root->dump();
+    // root = root->rotate_right();
+    // // root->left->rotate_right();
+    // std::cout << "rotated\n";
+    // // root->raw_dump();
+    // root->dump();
+    // root = root->rotate_left();
+    // std::cout << "left rot\n";
+    // root->dump();
     root->print_sorted();
+    std::cout << std::endl;
+    root->remove_entry(50);
+    root->dump();
     std::cout << root->check_entry(72) << root->check_entry(4);
+    std::cout << "validatiing...\n";
+    root->validate_parentness();
+    std::cout << "validation of parentness is ok if no errors\n";
+    delete root;
+}
+
+int main() {
+    test();
 }

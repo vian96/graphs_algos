@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
 #include <cassert>
 
 template<typename T>
@@ -28,6 +29,7 @@ struct Node {
         delete right;
     }
 
+    // returns pointer to inserted Node
     Node<T> *add_entry(T data) {
         auto parent = this;
         auto child = &parent;
@@ -40,6 +42,42 @@ struct Node {
         }
         *child = new Node<T>(data, parent);
         return *child;
+    }
+
+    // removes by value, returns parent or nullptr if not found, WITH DELETE
+    Node<T> *remove_entry(T data_) {
+        auto node = find_entry(data_);
+        if (!node) 
+            return nullptr;
+        auto p = node->parent;
+        delete node->remove();
+        return p;
+    }
+
+    // removes this node, WITHOUT DELETE - returns what should be deleted
+    Node<T> *remove() {
+        if (!(left || right)) {
+            auto p = parent;
+            auto ptr = p->get_child_ptr(this);
+            *ptr = nullptr;
+            return this;
+        }
+        if (!(left && right)) {
+            auto p = parent;
+            auto ptr = p->get_child_ptr(this);
+            auto child = (left) ? (left) : (right);
+            *ptr = child;
+            left = nullptr; // so no deletion in destructor
+            right = nullptr;
+            child->parent = p;
+            return this;
+        }
+        // both are not nullptr
+        auto next = right;
+        while (next->left != nullptr)
+            next = next->left;
+        std::swap(next->data, data); // TODO if data is big not efficient?
+        return next->remove();
     }
 
     void raw_dump(int depth=0) {
@@ -75,7 +113,7 @@ struct Node {
             right->print_sorted();
     }
 
-    bool check_entry(T data) {
+    Node<T> *find_entry(T data) {
         auto node = this;
         while (node && node->data != data) {
             if (data <= node->data) 
@@ -83,9 +121,14 @@ struct Node {
             else 
                 node = node->right;
         }
-        return !!node;
+        return node;
     }
 
+    bool check_entry(T data) {
+        return !!find_entry(data);
+    }
+
+    // returns pointer to new root (upper node)
     Node<T> *rotate_right() {
         if (!left) {
             assert(left!=nullptr);
@@ -103,6 +146,7 @@ struct Node {
         return left_;
     }
 
+    // returns pointer to new root (upper node)
     Node<T> *rotate_left() {
         if (!right) {
             assert(right!=nullptr);
@@ -120,11 +164,23 @@ struct Node {
         return right_;
     }
 
+    // returns pointer to struct variable holding specified pointer
     Node<T> **get_child_ptr(Node<T> *ptr) {
         if (left == ptr)
             return &left;
         if (right == ptr)
             return &right;
         return nullptr;
+    }
+
+    void validate_parentness() {
+        if (left) {
+            assert(left->parent == this);
+            left->validate_parentness();
+        }
+        if (right) {
+            assert(right->parent == this);
+            right->validate_parentness();
+        }
     }
 };
