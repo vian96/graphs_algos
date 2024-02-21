@@ -58,7 +58,7 @@ struct SplayTree {
 
     void remove_entry(T data) {
         auto x = root->remove_entry(data);
-        if (!x) 
+        if (x) 
             splay(x);
     }
 };
