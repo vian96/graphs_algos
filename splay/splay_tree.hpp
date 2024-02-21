@@ -61,6 +61,32 @@ struct SplayTree {
         if (x) 
             splay(x);
     }
+
+    // will delete node of that tree that you passed, so be careful
+    void join(SplayTree<T> *tree) {
+        auto big = root;
+        while (big->right)
+            big = big->right;
+        splay(big);
+        root->right = tree->root;
+        tree->root->parent = root;
+    }
+
+    // makes itself smaller subtree and returns bigger one
+    // if value is not found does nothing and returns EmptyTree
+    SplayTree<T> *split(T value) {
+        auto node = root->find_entry(value);
+        if (!node) {
+            assert(node);
+            return nullptr;
+        }
+        splay(node);
+        auto big = root->right;
+        big->parent = nullptr;
+        root = root->left;
+        root->parent = nullptr;
+        return new SplayTree<T>(big);
+    }
 };
 
 #endif // SPLAY_TREE_HPP
