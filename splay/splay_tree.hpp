@@ -52,6 +52,13 @@ struct SplayTree {
         root = x;
     }
 
+    Node<T> *find_entry(T data) {
+        auto x = root->find_entry(data);
+        if (x)
+            splay(x);
+        return x;
+    }
+
     void add_entry(T data) {
         splay(root->add_entry(data));
     }

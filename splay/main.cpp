@@ -10,6 +10,7 @@ void splay_test() {
     SplayTree<int> *tree = new SplayTree<int>(root);
     // tree->root->dump();
     tree->splay(tree->root->find_entry(51));
+    tree->find_entry(51);
     tree->add_entry(85);
     tree->remove_entry(42);
     tree->root->dump();

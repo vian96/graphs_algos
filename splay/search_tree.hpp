@@ -19,7 +19,7 @@ struct Node {
     template <typename T_iter>
     Node<T>(T_iter entries) {
         auto it = entries.begin();
-        this->data = *it;
+        data = *it;
         parent = nullptr;
         left = nullptr;
         right = nullptr;
@@ -134,7 +134,7 @@ struct Node {
     // returns pointer to new root (upper node)
     Node<T> *rotate_right() {
         if (!left) {
-            assert(left!=nullptr);
+            assert(left != nullptr);
             return this;
         }
         auto left_ = left;
@@ -154,7 +154,7 @@ struct Node {
     // returns pointer to new root (upper node)
     Node<T> *rotate_left() {
         if (!right) {
-            assert(right!=nullptr);
+            assert(right != nullptr);
             return this;
         }
         auto right_ = right;
