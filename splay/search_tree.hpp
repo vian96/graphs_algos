@@ -1,3 +1,6 @@
+#ifndef SEARCH_TREE_HPP
+#define SEARCH_TREE_HPP
+
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -24,7 +27,7 @@ struct Node {
             add_entry(*it);
     }
 
-    ~Node() {
+    ~Node<T>() {
         delete left;
         delete right;
     }
@@ -141,6 +144,8 @@ struct Node {
             *(p->get_child_ptr(this)) = left_;
         left_->parent = p;
         left = temp;
+        if (temp)
+            temp->parent = this;
         parent = left_;
         left_->right = this;
         return left_;
@@ -159,6 +164,8 @@ struct Node {
             *(p->get_child_ptr(this)) = right_;
         right_->parent = p;
         right = temp;
+        if (temp)
+            temp->parent = this;
         parent = right_;
         right_->left = this;
         return right_;
@@ -184,3 +191,5 @@ struct Node {
         }
     }
 };
+
+#endif // SEARCH_TREE_HPP

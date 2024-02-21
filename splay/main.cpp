@@ -1,10 +1,23 @@
 #include "search_tree.hpp"
+#include "splay_tree.hpp"
 
 #include <vector>
 #include <iostream>
 
+void splay_test() {
+    Node<int> *root = new Node<int>(std::vector<int>(
+                            {60,50,40,30,20,10, 51, 52, 57, 52, 41,42,43, 70, 80, 90}));
+    SplayTree<int> *tree = new SplayTree<int>(root);
+    tree->root->dump();
+    tree->splay(tree->root->find_entry(51));
+    tree->root->dump();
+    tree->root->validate_parentness();
+    std::cout << "validation of parentness is ok if no errors\n";
+}
+
 void test() {
-    Node<int> *root = new Node<int>(std::vector<int>({60,50,40,30,20,10, 51, 52, 57, 52, 41,42,43, 70, 80, 90}));
+    Node<int> *root = new Node<int>(std::vector<int>(
+                            {60,50,40,30,20,10, 51, 52, 57, 52, 41,42,43, 70, 80, 90}));
     root->dump();
     // root->raw_dump();
     // root = root->rotate_right();
@@ -27,5 +40,5 @@ void test() {
 }
 
 int main() {
-    test();
+    splay_test();
 }
